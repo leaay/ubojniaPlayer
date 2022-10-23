@@ -54,8 +54,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <p>connected users ids..</p>
-      
+      <p>send message to all users conneted to this site</p>
       <input value={value} type='text' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setValue(target.value)}/>
       <button onClick={handleClick}>send</button>
       <div className='box'>
