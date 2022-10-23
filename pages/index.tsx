@@ -2,33 +2,48 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+
 import io from "socket.io-client";
-import { useEffect , useState } from 'react';
+import { useEffect , useState , ChangeEvent } from 'react';
+let socket:any;
 
 const Home: NextPage = () => {
 
+  const [value , setValue] = useState("");
+ 
+  const [messages,setMessages] = useState<string[]>([]);
+ 
   async function connectSocket() {
 
     await fetch("/api/socket");
 
   }
 
-  const [ids , setIds] = useState<string[]>([]);
+  function handleClick(){
+    socket.emit("message" , value);
+    setMessages((prev)=>[...prev, value]);
+    
+  }
+  
 
+  
   useEffect(() => {
       
-      connectSocket();
+    connectSocket();
+    socket = io();
 
+    socket.on('connect', () => {
+      console.log(socket)
+    })
 
-      const socket = io();
+    socket.on('receive', (msg:string) => {
+      console.log(msg)
+      setMessages((prev)=>[...prev, msg]);
+      console.log(messages)
+    })
 
-
-      socket.on("connect", () => {
-          setIds([...ids , socket.id]);
-      })
   
   }, []);
-
 
 
   return (
@@ -40,7 +55,10 @@ const Home: NextPage = () => {
       </Head>
 
       <p>connected users ids..</p>
-      <p className='box'>{ids.map((item)=>item)}</p>
+      
+      <input value={value} type='text' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setValue(target.value)}/>
+      <button onClick={handleClick}>send</button>
+      <p>{messages}</p>
     </div>
   )
 }
