@@ -1,5 +1,6 @@
 html,
-body {
+body,
+* {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
@@ -28,5 +29,6 @@ a {
 .box{
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: .2rem;
+
 }
