@@ -1,17 +1,18 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
-
-
+// import ReactPlayer from 'react-player/youtube'
+const  ReactPlayer = dynamic(() => import('react-player/youtube'), { ssr: false })
 import io from "socket.io-client";
 import { useEffect , useState , ChangeEvent } from 'react';
 let socket:any;
 
 const Home: NextPage = () => {
 
-  const [value , setValue] = useState("");
- 
-  const [messages,setMessages] = useState<string[]>([]);
+  const [inputValue , setInputValue] = useState("");
+  const [video , setVideo] = useState("");
+  const [receivedVideo , setRecivedVideo] = useState("")
  
   async function connectSocket() {
 
@@ -20,9 +21,10 @@ const Home: NextPage = () => {
   }
 
   function handleClick(){
-    socket.emit("message" , value);
-    setMessages((prev)=>[...prev, value]);
-    setValue("");
+    setVideo(inputValue)
+    socket.emit("message" , video);
+    console.log()
+    setInputValue("");
   }
   
 
@@ -37,9 +39,10 @@ const Home: NextPage = () => {
     })
 
     socket.on('receive', (msg:string) => {
+
       console.log(msg)
-      setMessages((prev)=>[...prev, msg]);
-      console.log(messages)
+      setRecivedVideo(msg)
+
     })
 
   
@@ -48,18 +51,21 @@ const Home: NextPage = () => {
 
   return (
     <div >
-      <Head>
+      {/* <Head>
         <title>testing socket.io</title>
         <meta name="description" content="testing socket.io" />
         <link rel="icon" href="/favicon.ico" />
-      </Head>
+      </Head> */}
 
       <p>send message to all users conneted to this site</p>
-      <input value={value} type='text' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setValue(target.value)}/>
+      <input value={inputValue} type='text' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setInputValue(target.value)}/>
       <button onClick={handleClick}>send</button>
-      <div className='box'>
-      {messages.map((msg:string,index:number)=><p key={index}>{msg}</p>)}
-      </div>
+
+     
+      <ReactPlayer url={video === '' ? receivedVideo : video} />
+      
+      
+
     </div>
   )
 }
