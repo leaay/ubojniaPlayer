@@ -19,6 +19,10 @@ const SocketHandler = (req:any , res:any) => {
             socket.broadcast.emit('receive', msg)
         })
 
+        socket.on('pause' , ()=>{
+            socket.broadcast.emit('videoPaused')
+        })
+
       })
 
     }
