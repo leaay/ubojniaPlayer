@@ -1,8 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
-import Image from 'next/image'
-// import ReactPlayer from 'react-player/youtube'
+
 const  ReactPlayer = dynamic(() => import('react-player/youtube'), { ssr: false })
 import io from "socket.io-client";
 import { useEffect , useState , ChangeEvent } from 'react';
@@ -12,6 +11,7 @@ const Home: NextPage = () => {
 
   const [inputValue , setInputValue] = useState("");
   const [video , setVideo] = useState("");
+  const [test , setTest] = useState("");
   const [receivedVideo , setRecivedVideo] = useState("")
   const [isPlaying , setIsPlaying] = useState<boolean>(true)
  
@@ -23,13 +23,14 @@ const Home: NextPage = () => {
 
   function handleClick(){
     setVideo(inputValue)
-    socket.emit("message" , video);
-    console.log()
+    socket.emit("message" , inputValue);
     setInputValue("");
   }
 
   function handlePause(){
-    socket.emit('pause' )
+    console.log('emitinh pasue')
+    socket.emit("pause" , inputValue)
+    
   }
   
 
@@ -39,19 +40,22 @@ const Home: NextPage = () => {
     connectSocket();
     socket = io();
 
-    socket.on('connect', () => {
-      console.log(socket)
-    })
+    // socket.on('connect', () => {
+    //   console.log(socket)
+    // })
 
     socket.on('receive', (msg:string) => {
 
-      console.log(msg)
+      console.log(test)
+
       setRecivedVideo(msg)
 
     })
 
-    socket.on('videoPaused', ()=>{
+    socket.on('stop', (msg:string)=>{
 
+      console.log('elo')
+      setTest(msg)
       setIsPlaying(false)
 
     })
@@ -59,31 +63,28 @@ const Home: NextPage = () => {
   
   }, []);
 
-  useEffect(()=>{
 
-    console.log(video + 'localvid')
-    console.log(receivedVideo + 'recivedVid')
-
-  },[video,receivedVideo])
 
 
   return (
     <div >
-      {/* <Head>
+      <Head>
         <title>testing socket.io</title>
         <meta name="description" content="testing socket.io" />
         <link rel="icon" href="/favicon.ico" />
-      </Head> */}
+      </Head>
 
-      <p>send message to all users conneted to this site</p>
       <input value={inputValue} type='text' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setInputValue(target.value)}/>
       <button onClick={handleClick}>send</button>
-
+      <button onClick={handlePause}>pasue</button>
+      <p>{receivedVideo}</p>
+      <p>{test}</p>
      
       <ReactPlayer 
-      playing={isPlaying} 
-      url={receivedVideo} 
-      onPause={handlePause}
+        playing={true} 
+        muted={true}
+        url={receivedVideo} 
+        onPause={handlePause}
       />
       
       
