@@ -25,14 +25,26 @@ const Home: NextPage = () => {
   function handleClick(){
     setVideo(inputValue)
     socket.emit("message" , inputValue);
+    setIsPlaying(true)
     setInputValue("");
   }
 
   function handlePause(){
     
     socket.emit("pause")
-    setInputValue("");
+
     
+  }
+
+  function handleResume(){
+    
+    socket.emit("resume")
+
+    
+  }
+
+  const handleTest = ()=>{
+    socket.emit('change')
   }
   
 
@@ -50,17 +62,29 @@ const Home: NextPage = () => {
 
     })
 
-    socket.on('stop', (msg:string)=>{
+    socket.on('stop', ()=>{
 
       console.log('elo')
-      setTest(msg)
       setIsPlaying(false)
 
+
+    })
+
+    socket.on('res', ()=>{
+      console.log('play')
+      setIsPlaying(true)
+    })
+
+
+    socket.on('test2',()=>{
+      console.log('test2')
     })
 
     return ()=>{
       socket.off('receive'),
-      socket.off('stop')
+      socket.off('stop'),
+      socket.off('test2'),
+      socket.off('res')
     }
 
   
@@ -80,14 +104,16 @@ const Home: NextPage = () => {
       <input value={inputValue} type='text' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setInputValue(target.value)}/>
       <button onClick={handleClick}>send</button>
       <button onClick={handlePause}>pasue</button>
+      <button onClick={handleResume}>resume</button>
       <p>{receivedVideo}</p>
       <p>{test}</p>
      
       <ReactPlayer 
-        playing={true} 
+        playing={isPlaying} 
         muted={true}
+        controls={false}
         url={video === '' ? receivedVideo : video} 
-        // onPause={handlePause}
+        onPause={handlePause}
       />
       
       

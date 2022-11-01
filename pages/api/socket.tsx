@@ -19,10 +19,24 @@ const SocketHandler = (req:any , res:any) => {
           socket.broadcast.emit('stop')
 
         })
+
+        socket.on("resume", () => {
+            
+            
+          socket.broadcast.emit('res')
+
+        })
         
         socket.on('message', msg => {
           
             socket.broadcast.emit('receive', msg)
+        })
+
+
+        socket.on('test' , ()=>{
+         
+          socket.broadcast.emit('test2')
+
         })
 
 

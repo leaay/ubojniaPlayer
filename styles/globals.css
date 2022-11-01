@@ -15,7 +15,11 @@ a {
 * {
   box-sizing: border-box;
 }
-
+button{
+  background-color: darkcyan;
+  color: white;
+  padding: .4rem;
+}
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
