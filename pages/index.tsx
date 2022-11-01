@@ -114,6 +114,7 @@ const Home: NextPage = () => {
         controls={false}
         url={video === '' ? receivedVideo : video} 
         onPause={handlePause}
+        onStart={handleResume}
       />
       
       
