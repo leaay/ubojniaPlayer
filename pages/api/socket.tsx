@@ -12,17 +12,26 @@ const SocketHandler = (req:any , res:any) => {
       res.socket.server.io = io
 
       io.on('connection', (socket) => {
+
+        socket.on("pause", () => {
+            
+            
+          socket.broadcast.emit('stop')
+
+        })
         
         socket.on('message', msg => {
           
             socket.broadcast.emit('receive', msg)
         })
+
+
+  
+
+        
+
       })
 
-      io.on('pause', (socket)=>{
-        console.log('pasue')
-        socket.broadcast.emit('stop')
-      })
 
     }
     res.end()

@@ -5,13 +5,14 @@ import dynamic from 'next/dynamic'
 const  ReactPlayer = dynamic(() => import('react-player/youtube'), { ssr: false })
 import io from "socket.io-client";
 import { useEffect , useState , ChangeEvent } from 'react';
-let socket:any;
+
+const socket = io();
 
 const Home: NextPage = () => {
 
   const [inputValue , setInputValue] = useState("");
-  const [video , setVideo] = useState("");
   const [test , setTest] = useState("");
+  const [video , setVideo] = useState("");
   const [receivedVideo , setRecivedVideo] = useState("")
   const [isPlaying , setIsPlaying] = useState<boolean>(true)
  
@@ -28,8 +29,9 @@ const Home: NextPage = () => {
   }
 
   function handlePause(){
-    console.log('emitinh pasue')
-    socket.emit("pause" , inputValue)
+    
+    socket.emit("pause")
+    setInputValue("");
     
   }
   
@@ -38,11 +40,7 @@ const Home: NextPage = () => {
   useEffect(() => {
       
     connectSocket();
-    socket = io();
-
-    // socket.on('connect', () => {
-    //   console.log(socket)
-    // })
+    
 
     socket.on('receive', (msg:string) => {
 
@@ -59,6 +57,11 @@ const Home: NextPage = () => {
       setIsPlaying(false)
 
     })
+
+    return ()=>{
+      socket.off('receive'),
+      socket.off('stop')
+    }
 
   
   }, []);
@@ -83,8 +86,8 @@ const Home: NextPage = () => {
       <ReactPlayer 
         playing={true} 
         muted={true}
-        url={receivedVideo} 
-        onPause={handlePause}
+        url={video === '' ? receivedVideo : video} 
+        // onPause={handlePause}
       />
       
       
