@@ -11,9 +11,7 @@ const socket = io();
 const Home: NextPage = () => {
 
   const [inputValue , setInputValue] = useState("");
-  const [test , setTest] = useState("");
   const [video , setVideo] = useState("");
-  const [receivedVideo , setRecivedVideo] = useState("")
   const [isPlaying , setIsPlaying] = useState<boolean>(true)
  
   async function connectSocket() {
@@ -32,21 +30,17 @@ const Home: NextPage = () => {
   function handlePause(){
     
     socket.emit("pause")
-
+    setIsPlaying(false)
     
   }
 
   function handleResume(){
-    
+    console.log("resume")
     socket.emit("resume")
-
+    setIsPlaying(true)
     
   }
 
-  const handleTest = ()=>{
-    socket.emit('change')
-  }
-  
 
   
   useEffect(() => {
@@ -56,9 +50,8 @@ const Home: NextPage = () => {
 
     socket.on('receive', (msg:string) => {
 
-      console.log(test)
 
-      setRecivedVideo(msg)
+      setVideo(msg)
 
     })
 
@@ -76,14 +69,11 @@ const Home: NextPage = () => {
     })
 
 
-    socket.on('test2',()=>{
-      console.log('test2')
-    })
+
 
     return ()=>{
       socket.off('receive'),
       socket.off('stop'),
-      socket.off('test2'),
       socket.off('res')
     }
 
@@ -105,14 +95,14 @@ const Home: NextPage = () => {
       <button onClick={handleClick}>send</button>
       <button onClick={handlePause}>pasue</button>
       <button onClick={handleResume}>resume</button>
-      <p>{receivedVideo}</p>
-      <p>{test}</p>
+      <p>{video}</p>
+      
      
       <ReactPlayer 
         playing={isPlaying} 
         muted={true}
         controls={false}
-        url={video === '' ? receivedVideo : video} 
+        url={video} 
         onPause={handlePause}
         onStart={handleResume}
       />
