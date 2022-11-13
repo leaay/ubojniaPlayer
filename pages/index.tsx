@@ -1,24 +1,42 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
-
 const  ReactPlayer = dynamic(() => import('react-player/youtube'), { ssr: false })
 import io from "socket.io-client";
 import { useEffect , useState , ChangeEvent } from 'react';
+import Chat from '../components/Chat';
+import styles from '../styles/page.module.scss'
+import Nick from '../components/Nick';
 
 const socket = io();
+
+interface nick{
+    nick:string,
+    color:string
+}
 
 const Home: NextPage = () => {
 
   const [inputValue , setInputValue] = useState("");
   const [video , setVideo] = useState("");
+
   const [isPlaying , setIsPlaying] = useState<boolean>(true)
- 
+
+  const [userInput , setUserInput] = useState<string>('');
+  const [userNick , setUserNick] = useState<nick>({nick:'',color:'#000000'});
+  const [users , setUsers] = useState<string[]>([])
+
+
   async function connectSocket() {
-
     await fetch("/api/socket");
-
   }
+
+  // function handleNick(){
+  //   setUserNick(userInput)
+  //   setUsers([...users , userInput])
+  //   socket.emit("newChater", userInput)
+  //   setUserInput('')
+  // }
 
   function handleClick(){
     setVideo(inputValue)
@@ -28,74 +46,75 @@ const Home: NextPage = () => {
   }
 
   function handlePause(){
-    
     socket.emit("pause")
     setIsPlaying(false)
-    
   }
 
   function handleResume(){
-    console.log("resume")
     socket.emit("resume")
     setIsPlaying(true)
-    
   }
 
-
+  useEffect(()=>{
+    if(userNick.nick !== ''){
+          
+          setUsers([...users , userNick.nick])
+          socket.emit("newChater",  userNick.nick)
+          
+    }
+    return
+  },[userNick])
   
   useEffect(() => {
       
     connectSocket();
+
+    socket.on("connect", () => {
+      console.log(socket.id); 
+    });
     
-
     socket.on('receive', (msg:string) => {
-
-
       setVideo(msg)
-
     })
 
     socket.on('stop', ()=>{
-
-      console.log('elo')
       setIsPlaying(false)
-
-
     })
 
     socket.on('res', ()=>{
-      console.log('play')
       setIsPlaying(true)
     })
 
-
+    socket.on('newUser', (msg:string) => {
+        console.log(msg)
+        setUsers((prev) => [...prev , msg])
+        
+  
+    })
 
 
     return ()=>{
       socket.off('receive'),
       socket.off('stop'),
-      socket.off('res')
-    }
-
+      socket.off('res'),
+      socket.off('connect'),
+      socket.off('newUser')
   
+    }
   }, []);
 
 
 
 
   return (
-    <div >
+    <div className={styles.pageBody} >
       <Head>
         <title>testing socket.io</title>
         <meta name="description" content="testing socket.io" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <input value={inputValue} type='text' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setInputValue(target.value)}/>
-      <button onClick={handleClick}>send</button>
-      <button onClick={handlePause}>pasue</button>
-      <button onClick={handleResume}>resume</button>
-      <p>{video}</p>
+
       
      
       <ReactPlayer 
@@ -104,11 +123,26 @@ const Home: NextPage = () => {
         controls={false}
         url={video} 
         onPause={handlePause}
-        onStart={handleResume}
+        onPlay={handleResume}
+        height='auto'
+        style={{width:"100%" , maxWidth:'100vw' , aspectRatio:'16/9'}}
+        
       />
-      
+
+
+      <input value={inputValue} placeholder='yt link' type='text' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setInputValue(target.value)}/>
+      <button className='button' onClick={handleClick}>send</button>
+      {/* <button onClick={handlePause}>pasue</button>
+      <button onClick={handleResume}>resume</button>
+       */}
+
+      {userNick.nick === '' ? <Nick setNick={setUserNick} /> : <Chat socket={socket} />}
       
 
+      {userNick.nick !== '' && <h1 style={{color:`${userNick.color}`}}>my nick: {userNick.nick}</h1>}
+      {users.map((user , index) => <p key={index}>{user}</p>)}
+      
+       
     </div>
   )
 }

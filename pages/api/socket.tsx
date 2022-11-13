@@ -12,10 +12,10 @@ const SocketHandler = (req:any , res:any) => {
       res.socket.server.io = io
 
       io.on('connection', (socket) => {
+        console.log('a user connected');
 
         socket.on("pause", () => {
-            
-            
+          
           socket.broadcast.emit('stop')
 
         })
@@ -27,20 +27,17 @@ const SocketHandler = (req:any , res:any) => {
 
         })
         
-        socket.on('message', msg => {
+        socket.on('message', (msg) => {
           
             socket.broadcast.emit('receive', msg)
         })
 
+        socket.on('newChater', (msg) => {
 
-        socket.on('test' , ()=>{
-         
-          socket.broadcast.emit('test2')
+          socket.broadcast.emit('newUser', msg)
 
         })
 
-
-  
 
         
 
