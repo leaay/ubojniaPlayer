@@ -24,7 +24,7 @@ const Home: NextPage = () => {
 
   const [userInput , setUserInput] = useState<string>('');
   const [userNick , setUserNick] = useState<nick>({nick:'',color:'#000000'});
-  const [users , setUsers] = useState<string[]>([])
+  const [users , setUsers] = useState<nick[]>([])
 
 
   async function connectSocket() {
@@ -58,8 +58,8 @@ const Home: NextPage = () => {
   useEffect(()=>{
     if(userNick.nick !== ''){
           
-          setUsers([...users , userNick.nick])
-          socket.emit("newChater",  userNick.nick)
+          setUsers([...users , userNick])
+          socket.emit("newChater",  userNick)
           
     }
     return
@@ -68,10 +68,10 @@ const Home: NextPage = () => {
   useEffect(() => {
       
     connectSocket();
-
-    socket.on("connect", () => {
-      console.log(socket.id); 
-    });
+    console.log(socket)
+    // socket.on("connect", () => {
+    //   console.log(socket.id); 
+    // });
     
     socket.on('receive', (msg:string) => {
       setVideo(msg)
@@ -85,12 +85,13 @@ const Home: NextPage = () => {
       setIsPlaying(true)
     })
 
-    socket.on('newUser', (msg:string) => {
+    socket.on('newUser', (msg:{nick:string,color:string}) => {
         console.log(msg)
         setUsers((prev) => [...prev , msg])
         
   
     })
+
 
 
     return ()=>{
@@ -136,11 +137,15 @@ const Home: NextPage = () => {
       <button onClick={handleResume}>resume</button>
        */}
 
-      {userNick.nick === '' ? <Nick setNick={setUserNick} /> : <Chat socket={socket} />}
+      {
+          userNick.nick === '' ? 
+          <Nick setNick={setUserNick} /> : 
+          <Chat currentUser={userNick} socket={socket} />
+      }
       
 
       {userNick.nick !== '' && <h1 style={{color:`${userNick.color}`}}>my nick: {userNick.nick}</h1>}
-      {users.map((user , index) => <p key={index}>{user}</p>)}
+      {/* {users.map((user , index) => <p style={{color:`${user.color}`}} key={index}>{user.nick}</p>)} */}
       
        
     </div>
