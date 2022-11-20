@@ -4,7 +4,11 @@
     width: 100%;
     min-height: 100vh;
     background-color: #121212;
-    display: flex;
+    padding-bottom: 1rem;
+    display: grid;
+    grid-template-columns: minmax(1em,1fr) minmax(100px, 1000px) minmax(1em,1fr);
+    grid-template-rows: max-content 1fr;
     flex-direction: column;
     align-items: center;
 }
+

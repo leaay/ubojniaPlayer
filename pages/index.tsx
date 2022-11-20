@@ -125,14 +125,15 @@ const Home: NextPage = () => {
         url={video} 
         onPause={handlePause}
         onPlay={handleResume}
-        height='auto'
-        style={{width:"100%" , maxWidth:'100vw' , aspectRatio:'16/9'}}
+        height={"auto"}
+        width={"100%"}
+        style={{width:"100%" , maxWidth:'100vw' , aspectRatio:'16/9', gridColumn:'2/3'}}
         
       />
 
-
+{/* 
       <input value={inputValue} placeholder='yt link' type='text' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setInputValue(target.value)}/>
-      <button className='button' onClick={handleClick}>send</button>
+      <button className='button' onClick={handleClick}>send</button> */}
       {/* <button onClick={handlePause}>pasue</button>
       <button onClick={handleResume}>resume</button>
        */}
@@ -144,7 +145,7 @@ const Home: NextPage = () => {
       }
       
 
-      {userNick.nick !== '' && <h1 style={{color:`${userNick.color}`}}>my nick: {userNick.nick}</h1>}
+     
       {/* {users.map((user , index) => <p style={{color:`${user.color}`}} key={index}>{user.nick}</p>)} */}
       
        

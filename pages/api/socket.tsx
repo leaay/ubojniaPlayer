@@ -37,9 +37,9 @@ const SocketHandler = (req:any , res:any) => {
           socket.broadcast.emit('newUser', msg)
 
         })
-        socket.on('send', () => {
+        socket.on('send', (msg) => {
 
-          socket.broadcast.emit('in')
+          socket.broadcast.emit('in', msg)
 
         })
 
