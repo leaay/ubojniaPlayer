@@ -21,6 +21,9 @@ const Chat = ({socket,currentUser}:prop) => {
     const [messages, setMessages] = useState<messInfo[]>([]);
     const [messageInput, setMessageInput] = useState<string>('');
 
+
+  
+
     function handleMessage(){
         
         const sending = {
@@ -29,8 +32,14 @@ const Chat = ({socket,currentUser}:prop) => {
             color:currentUser.color
         }
 
-        console.log(sending)
-        setMessages([...messages , sending])
+        if(messages.length >= 35){
+            setMessages(prev => [...prev.slice(2) , sending])
+
+        }else{
+            setMessages([...messages , sending])
+        }
+       
+        
         socket.emit("send" , sending );
         setMessageInput('')
         
@@ -43,7 +52,14 @@ const Chat = ({socket,currentUser}:prop) => {
   
 
         socket.on('in',(msg:messInfo)=>{
-            setMessages(prev => [...prev , msg])
+            
+            if(messages.length >= 35){
+                console.log('in')
+                setMessages(prev => [...prev.slice(1) , msg])
+            }else{
+                setMessages(prev => [...prev , msg])
+            }
+            
         })
 
         
@@ -56,11 +72,11 @@ const Chat = ({socket,currentUser}:prop) => {
 
     return(
         <div className={styles.body}>
-            <div className={styles.messageBox}>
+            <div  className={styles.messageBox}>
                 {messages.map((message , index) => <span className={styles.msg} key={index}  ><p style={{color:`${message.color}`}}>{message.nick}</p> : {message.message}</span>)}
             </div>
             <div className={styles.inputsBox}>
-                <input value={messageInput} type='text' placeholder='message' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setMessageInput(target.value)}/>
+                <input maxLength={30} value={messageInput} type='text' placeholder='message' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setMessageInput(target.value)}/>
                 <button onClick={handleMessage} className='button'>send</button>
             </div>
 

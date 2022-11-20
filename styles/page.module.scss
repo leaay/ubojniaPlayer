@@ -2,13 +2,17 @@
 
 .pageBody{
     width: 100%;
-    min-height: 100vh;
+    height: 100vh;
     background-color: #121212;
     padding-bottom: 1rem;
     display: grid;
+    row-gap: .5rem;
     grid-template-columns: minmax(1em,1fr) minmax(100px, 1000px) minmax(1em,1fr);
-    grid-template-rows: max-content 1fr;
+    grid-template-rows: max-content min-content 1fr;
     flex-direction: column;
     align-items: center;
 }
 
+.playerLinks{
+    grid-column: 2/3;
+}

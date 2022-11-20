@@ -131,9 +131,11 @@ const Home: NextPage = () => {
         
       />
 
-{/* 
+      <div className={styles.playerLinks}>
       <input value={inputValue} placeholder='yt link' type='text' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setInputValue(target.value)}/>
-      <button className='button' onClick={handleClick}>send</button> */}
+      <button className='button' onClick={handleClick}>send</button>
+      </div>
+
       {/* <button onClick={handlePause}>pasue</button>
       <button onClick={handleResume}>resume</button>
        */}
