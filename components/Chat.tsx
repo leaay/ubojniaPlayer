@@ -32,7 +32,7 @@ const Chat = ({socket,currentUser}:prop) => {
             color:currentUser.color
         }
 
-        if(messages.length >= 35){
+        if(messages.length >= 50){
             setMessages(prev => [...prev.slice(2) , sending])
 
         }else{
@@ -53,7 +53,7 @@ const Chat = ({socket,currentUser}:prop) => {
 
         socket.on('in',(msg:messInfo)=>{
             
-            if(messages.length >= 35){
+            if(messages.length >= 50){
                 console.log('in')
                 setMessages(prev => [...prev.slice(1) , msg])
             }else{

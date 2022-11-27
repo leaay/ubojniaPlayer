@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+import Image from 'next/future/image'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
 const  ReactPlayer = dynamic(() => import('react-player/youtube'), { ssr: false })
@@ -19,10 +20,8 @@ const Home: NextPage = () => {
 
   const [inputValue , setInputValue] = useState("");
   const [video , setVideo] = useState("");
-
   const [isPlaying , setIsPlaying] = useState<boolean>(true)
-
-  const [userInput , setUserInput] = useState<string>('');
+  const [isMuted , setIsMuted] = useState<boolean>(true)
   const [userNick , setUserNick] = useState<nick>({nick:'',color:'#000000'});
   const [users , setUsers] = useState<nick[]>([])
 
@@ -31,12 +30,6 @@ const Home: NextPage = () => {
     await fetch("/api/socket");
   }
 
-  // function handleNick(){
-  //   setUserNick(userInput)
-  //   setUsers([...users , userInput])
-  //   socket.emit("newChater", userInput)
-  //   setUserInput('')
-  // }
 
   function handleClick(){
     setVideo(inputValue)
@@ -117,23 +110,38 @@ const Home: NextPage = () => {
 
 
       
-     
-      <ReactPlayer 
-        playing={isPlaying} 
-        muted={true}
-        controls={false}
-        url={video} 
-        onPause={handlePause}
-        onPlay={handleResume}
-        height={"auto"}
-        width={"100%"}
-        style={{width:"100%" , maxWidth:'100vw' , aspectRatio:'16/9', gridColumn:'2/3'}}
+     <div className={styles.playerWrapper}>
+        <ReactPlayer 
+          playing={isPlaying} 
+          muted={isMuted}
+          controls={false}
+          url={video} 
+          onPause={handlePause}
+          onPlay={handleResume}
+          height={"auto"}
+          width={"100%"}
+          style={{width:"100%" , maxWidth:'100vw' , aspectRatio:'16/9'}}
+          onEnded={()=>{setIsPlaying(false) ; setVideo("")}}
+        />
+
         
-      />
+
+        <div style={video==='' ? {opacity:'1'} : {opacity:'0'} } className={styles.playerOverlay}>
+        {video === '' &&  <p >no video playing right now</p>}
+
+        {video !== '' && 
+            <button onClick={()=>setIsMuted(!isMuted)}>
+              <Image alt='mute or unmute' src={isMuted ? '/mute.svg' : '/unmute.svg'} width={40} height={40} /></button>
+        }
+
+        </div>
+
+     </div>
 
       <div className={styles.playerLinks}>
-      <input value={inputValue} placeholder='yt link' type='text' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setInputValue(target.value)}/>
-      <button className='button' onClick={handleClick}>send</button>
+          <input value={inputValue} placeholder='yt link' type='text' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setInputValue(target.value)}/>
+          <button className='button' onClick={handleClick}>send</button>
+          
       </div>
 
       {/* <button onClick={handlePause}>pasue</button>

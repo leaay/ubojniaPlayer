@@ -21,7 +21,7 @@
     height: 40px;
     border-radius: 5px;
     &:focus, &:hover{
-        outline: solid 3px white;
+        outline: solid 5px white;
     }
 
     div{
@@ -31,5 +31,13 @@
     }
 }
 .activeColor{
-    outline: solid 1px white;
+    outline: solid 3px white;
+}
+
+@media (min-width: 1000px){
+    .body{
+        grid-column: 2/3;
+        grid-row: 1/-1;
+    }
+
 }
