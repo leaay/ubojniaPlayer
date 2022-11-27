@@ -8,6 +8,7 @@ import { useEffect , useState , ChangeEvent } from 'react';
 import Chat from '../components/Chat';
 import styles from '../styles/page.module.scss'
 import Nick from '../components/Nick';
+import AddVideo from '../components/AddVideo'
 
 const socket = io();
 
@@ -24,7 +25,7 @@ const Home: NextPage = () => {
   const [isMuted , setIsMuted] = useState<boolean>(true)
   const [userNick , setUserNick] = useState<nick>({nick:'',color:'#000000'});
   const [users , setUsers] = useState<nick[]>([])
-
+  const [newVideoModal , setNewVideoModal] = useState<boolean>(false)
 
   async function connectSocket() {
     await fetch("/api/socket");
@@ -110,43 +111,55 @@ const Home: NextPage = () => {
 
 
       
-     <div className={styles.playerWrapper}>
-        <ReactPlayer 
-          playing={isPlaying} 
-          muted={isMuted}
-          controls={false}
-          url={video} 
-          onPause={handlePause}
-          onPlay={handleResume}
-          height={"auto"}
-          width={"100%"}
-          style={{width:"100%" , maxWidth:'100vw' , aspectRatio:'16/9'}}
-          onEnded={()=>{setIsPlaying(false) ; setVideo("")}}
-        />
+        <div className={styles.playerWrapper}>
+            <ReactPlayer 
+              playing={isPlaying} 
+              muted={isMuted}
+              controls={false}
+              url={video} 
+              onPause={handlePause}
+              onPlay={handleResume}
+              height={"auto"}
+              width={"100%"}
+              style={{width:"100%" , maxWidth:'100vw' , aspectRatio:'16/9'}}
+              onEnded={()=>{setIsPlaying(false) ; setVideo("")}}
+            />
 
-        
+            
 
-        <div style={video==='' ? {opacity:'1'} : {opacity:'0'} } className={styles.playerOverlay}>
-        {video === '' &&  <p >no video playing right now</p>}
+            <div style={ video === '' ? {opacity:'1'} : {}} className={styles.playerOverlay}>
+            {video === '' &&  <p >no video playing right now</p>}
 
-        {video !== '' && 
-            <button onClick={()=>setIsMuted(!isMuted)}>
-              <Image alt='mute or unmute' src={isMuted ? '/mute.svg' : '/unmute.svg'} width={40} height={40} /></button>
-        }
+            {video !== '' && 
+                <button onClick={()=>setIsMuted(!isMuted)}>
+                  <Image alt='mute or unmute' src={isMuted ? '/mute.svg' : '/unmute.svg'} width={40} height={40} /></button>
+            }
 
-        </div>
+            </div>
 
-     </div>
+          </div>
 
-      <div className={styles.playerLinks}>
-          <input value={inputValue} placeholder='yt link' type='text' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setInputValue(target.value)}/>
-          <button className='button' onClick={handleClick}>send</button>
-          
-      </div>
+          <div className={styles.playerLinks}>
+
+            {userNick.nick !== '' && 
+
+              <> 
+                <input value={inputValue} placeholder='yt link' type='text' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setInputValue(target.value)}/>
+                <button className='button' onClick={handleClick}>send</button>
+                <button className='button' onClick={()=>setNewVideoModal(true)}>test</button>
+              </>
+
+            }
+
+          </div>
 
       {/* <button onClick={handlePause}>pasue</button>
       <button onClick={handleResume}>resume</button>
        */}
+
+      {
+        newVideoModal && <AddVideo close={setNewVideoModal} />
+      }
 
       {
           userNick.nick === '' ? 
@@ -155,8 +168,7 @@ const Home: NextPage = () => {
       }
       
 
-     
-      {/* {users.map((user , index) => <p style={{color:`${user.color}`}} key={index}>{user.nick}</p>)} */}
+  
       
        
     </div>

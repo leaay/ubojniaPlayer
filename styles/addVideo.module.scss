@@ -1,0 +1,25 @@
+
+.addBody{
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: #1212120e;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    backdrop-filter: blur(3px);
+}
+
+.addModal{
+    background-color: #2b2b2b;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 2rem;
+    border-radius: 5px;
+}
