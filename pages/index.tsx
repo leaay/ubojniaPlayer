@@ -74,6 +74,7 @@ const Home: NextPage = () => {
     socket.on('receive', (msg:video) => {
       setVideo(msg)
       setIsOwner(false)
+      setIsPlaying(true)
     })
 
     socket.on('stop', ()=>{
@@ -169,7 +170,7 @@ const Home: NextPage = () => {
           </div>
 
       {
-        newVideoModal && <AddVideo owner={setIsOwner} addVideo={setVideo} socket={socket} user={userNick.nick} close={setNewVideoModal} />
+        newVideoModal && <AddVideo playing={setIsPlaying} owner={setIsOwner} addVideo={setVideo} socket={socket} user={userNick.nick} close={setNewVideoModal} />
       }
 
       {
