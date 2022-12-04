@@ -26,7 +26,7 @@ const Nick = ({setNick}:prop) => {
                  <div  style={{backgroundColor:`${colorValue}`}} ></div>
                 </button>)}
             </div>
-            <button disabled={nickInput === '' ? true : false} className='button' onClick={()=>setNick({nick:nickInput,color:color})}>change</button>
+            <button disabled={nickInput === '' ? true : false} className='button' onClick={()=>setNick({nick:nickInput,color:color})}>join</button>
         </div>
     )
 

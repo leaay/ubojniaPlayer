@@ -16,28 +16,29 @@ interface nick{
     nick:string,
     color:string
 }
+interface video{
+    url:string,
+    title:string,
+    user:string
+}
 
 const Home: NextPage = () => {
 
-  const [inputValue , setInputValue] = useState("");
-  const [video , setVideo] = useState("");
+
+  const [video , setVideo] = useState<video>({url:"",title:"",user:""});
   const [isPlaying , setIsPlaying] = useState<boolean>(true)
   const [isMuted , setIsMuted] = useState<boolean>(true)
   const [userNick , setUserNick] = useState<nick>({nick:'',color:'#000000'});
   const [users , setUsers] = useState<nick[]>([])
   const [newVideoModal , setNewVideoModal] = useState<boolean>(false)
+  const [isOwner , setIsOwner] = useState<boolean>(false)
 
   async function connectSocket() {
     await fetch("/api/socket");
   }
 
 
-  function handleClick(){
-    setVideo(inputValue)
-    socket.emit("message" , inputValue);
-    setIsPlaying(true)
-    setInputValue("");
-  }
+
 
   function handlePause(){
     socket.emit("pause")
@@ -47,6 +48,12 @@ const Home: NextPage = () => {
   function handleResume(){
     socket.emit("resume")
     setIsPlaying(true)
+  }
+
+  function handleCancel(){
+    setVideo({url:"",title:"",user:""})
+    socket.emit('newVid' , {url:'' , title:"" , user: ''})
+
   }
 
   useEffect(()=>{
@@ -62,13 +69,11 @@ const Home: NextPage = () => {
   useEffect(() => {
       
     connectSocket();
-    console.log(socket)
-    // socket.on("connect", () => {
-    //   console.log(socket.id); 
-    // });
+
     
-    socket.on('receive', (msg:string) => {
+    socket.on('receive', (msg:video) => {
       setVideo(msg)
+      setIsOwner(false)
     })
 
     socket.on('stop', ()=>{
@@ -116,23 +121,27 @@ const Home: NextPage = () => {
               playing={isPlaying} 
               muted={isMuted}
               controls={false}
-              url={video} 
+              url={video.url} 
               onPause={handlePause}
               onPlay={handleResume}
               height={"auto"}
               width={"100%"}
               style={{width:"100%" , maxWidth:'100vw' , aspectRatio:'16/9'}}
-              onEnded={()=>{setIsPlaying(false) ; setVideo("")}}
+              onEnded={()=>{setIsPlaying(false) ; setVideo({url:"",title:"",user:""})}}
             />
 
             
 
-            <div style={ video === '' ? {opacity:'1'} : {}} className={styles.playerOverlay}>
-            {video === '' &&  <p >no video playing right now</p>}
+            <div style={ video.title === '' ? {opacity:'1'} : {}} className={styles.playerOverlay}>
+            {video.title === '' &&  <p    >no video playing right now</p>}
 
-            {video !== '' && 
-                <button onClick={()=>setIsMuted(!isMuted)}>
-                  <Image alt='mute or unmute' src={isMuted ? '/mute.svg' : '/unmute.svg'} width={40} height={40} /></button>
+            {video.title !== '' && 
+                <div>  
+                    <h1>{video.title} </h1>
+                    <button onClick={()=>setIsMuted(!isMuted)}>
+                      <Image alt='mute or unmute' src={isMuted ? '/mute.svg' : '/unmute.svg'} width={40} height={40} /></button>
+                    <h3>requested by: {video.user}</h3>
+                </div>
             }
 
             </div>
@@ -143,22 +152,24 @@ const Home: NextPage = () => {
 
             {userNick.nick !== '' && 
 
-              <> 
-                <input value={inputValue} placeholder='yt link' type='text' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setInputValue(target.value)}/>
-                <button className='button' onClick={handleClick}>send</button>
-                <button className='button' onClick={()=>setNewVideoModal(true)}>test</button>
+              <>
+                {video.title === '' ? <button className='button' onClick={()=>setNewVideoModal(true)}>add video</button> : null}
+                
+                {video.title !== '' && isOwner ? <>
+                <button className='button' onClick={handleResume}>play <Image alt='resume vid' src={'/play.svg'} width={20} height={20} /></button>
+                <button className='button' onClick={handlePause}>pause <Image alt='pasue vid' src={'/pause.svg'}  width={20} height={20} /></button>
+                <button style={{backgroundColor:'#a82a1e'}} className='button' onClick={handleCancel}>cancel <Image alt='cancel vid' src={'/close.svg'}  width={20} height={20} /></button>
+                </> : null }
+                {/* <button className='button' onClick={()=>setNewVideoModal(true)}>add video</button> */}
+                
               </>
 
             }
 
           </div>
 
-      {/* <button onClick={handlePause}>pasue</button>
-      <button onClick={handleResume}>resume</button>
-       */}
-
       {
-        newVideoModal && <AddVideo close={setNewVideoModal} />
+        newVideoModal && <AddVideo owner={setIsOwner} addVideo={setVideo} socket={socket} user={userNick.nick} close={setNewVideoModal} />
       }
 
       {

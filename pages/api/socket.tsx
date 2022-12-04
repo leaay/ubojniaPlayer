@@ -27,7 +27,7 @@ const SocketHandler = (req:any , res:any) => {
 
         })
         
-        socket.on('message', (msg) => {
+        socket.on('newVid', (msg) => {
           
             socket.broadcast.emit('receive', msg)
         })
