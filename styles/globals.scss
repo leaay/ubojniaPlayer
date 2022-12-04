@@ -23,6 +23,17 @@ button,input{
   all: unset;
   cursor: pointer;
   box-sizing: border-box;
+  &:focus, &:hover{
+    outline: solid 1px white;
+  }
+}
+input[type="text"]{
+  &:focus-visible{
+    outline: solid 2px rgb(27, 158, 240);
+  }
+  &:focus:not(:focus-visible){
+    outline: none;
+  }
 }
 
 .button{

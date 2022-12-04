@@ -76,8 +76,15 @@ const Chat = ({socket,currentUser}:prop) => {
                 {messages.map((message , index) => <span className={styles.msg} key={index}  ><p style={{color:`${message.color}`}}>{message.nick}</p> : {message.message}</span>)}
             </div>
             <div className={styles.inputsBox}>
-                <input maxLength={30} value={messageInput} type='text' placeholder='message' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setMessageInput(target.value)}/>
-                <button onClick={handleMessage} className='button'>send</button>
+                <input 
+                    onKeyPress={({key})=>{if(key === 'Enter' && messageInput !== ''){handleMessage()}}} 
+                    maxLength={30} 
+                    value={messageInput} 
+                    type='text' 
+                    placeholder='message' 
+                    onChange={({target}:ChangeEvent<HTMLInputElement>)=>setMessageInput(target.value)}/>
+
+                <button disabled={messageInput === '' ? true : false}  onClick={handleMessage} className='button'>send</button>
             </div>
 
             {/* {userNick.nick !== '' && <h1 style={{color:`${userNick.color}`}}>my nick: {userNick.nick}</h1>} */}
