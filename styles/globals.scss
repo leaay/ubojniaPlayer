@@ -60,3 +60,10 @@ input[type="text"]{
 }
 
 
+@media (prefers-color-scheme: dark) {
+  .button{
+    &:focus, &:hover{
+      outline: solid 1px white;
+    }
+  }
+}
