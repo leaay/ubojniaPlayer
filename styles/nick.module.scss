@@ -41,3 +41,12 @@
     }
 
 }
+
+@media (prefers-color-scheme: dark) {
+    .color{
+
+        &:focus, &:hover{
+            outline: solid 5px white;
+        }
+    }
+  }
