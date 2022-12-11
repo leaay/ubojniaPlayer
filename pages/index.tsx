@@ -4,7 +4,7 @@ import Head from 'next/head'
 import dynamic from 'next/dynamic'
 const  ReactPlayer = dynamic(() => import('react-player/youtube'), { ssr: false })
 import io from "socket.io-client";
-import { useEffect , useState , ChangeEvent } from 'react';
+import { useEffect , useState , useRef} from 'react';
 import Chat from '../components/Chat';
 import styles from '../styles/page.module.scss'
 import Nick from '../components/Nick';
@@ -33,6 +33,11 @@ const Home: NextPage = () => {
   const [newVideoModal , setNewVideoModal] = useState<boolean>(false)
   const [isOwner , setIsOwner] = useState<boolean>(false)
 
+  const [vidDuration , setVidDuration] = useState<number>(0)
+  const [currentSec , setCurrentSec] = useState<number>(0)
+
+  const playerRef = useRef()
+
   async function connectSocket() {
     await fetch("/api/socket");
   }
@@ -54,6 +59,15 @@ const Home: NextPage = () => {
     setVideo({url:"",title:"",user:""})
     socket.emit('newVid' , {url:'' , title:"" , user: ''})
 
+  }
+
+  function handleStream(sec:number){
+    console.log(sec)
+  }
+
+  function handleTest(){
+    console.log(playerRef)
+    // player.current?.seekTo(20)
   }
 
   useEffect(()=>{
@@ -119,6 +133,7 @@ const Home: NextPage = () => {
       
         <div className={styles.playerWrapper}>
             <ReactPlayer 
+              ref={playerRef}
               playing={isPlaying} 
               muted={isMuted}
               controls={false}
@@ -129,6 +144,9 @@ const Home: NextPage = () => {
               width={"100%"}
               style={{width:"100%" , maxWidth:'100vw' , aspectRatio:'16/9'}}
               onEnded={()=>{setIsPlaying(false) ; setVideo({url:"",title:"",user:""})}}
+              onDuration={(duration)=>{setVidDuration(duration)}}
+              onProgress={(progress)=>{setCurrentSec(Math.ceil(progress.playedSeconds)) ; handleStream(progress.playedSeconds)}}
+              
             />
 
             
@@ -155,13 +173,15 @@ const Home: NextPage = () => {
 
               <>
                 {video.title === '' ? <button className='button' onClick={()=>setNewVideoModal(true)}>add video</button> : null}
-                
+                <p>{vidDuration} vid duration</p>
+                <p>{currentSec} current vid time </p>
+                <button onClick={handleTest}>+10</button>
                 {video.title !== '' && isOwner ? <>
                 <button className='button' onClick={handleResume}>play <Image alt='resume vid' src={'/play.svg'} width={20} height={20} /></button>
                 <button className='button' onClick={handlePause}>pause <Image alt='pasue vid' src={'/pause.svg'}  width={20} height={20} /></button>
                 <button style={{backgroundColor:'#a82a1e'}} className='button' onClick={handleCancel}>cancel <Image alt='cancel vid' src={'/close.svg'}  width={20} height={20} /></button>
                 </> : null }
-                {/* <button className='button' onClick={()=>setNewVideoModal(true)}>add video</button> */}
+                
                 
               </>
 
