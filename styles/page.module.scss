@@ -4,11 +4,11 @@
     width: 100%;
     height: 100vh;
     background-color: #121212;
-    
+    max-height: 100vh;
     display: grid;
-    row-gap: .5rem;
+    
     grid-template-columns: minmax(1em,1fr) minmax(100px, 1000px) minmax(1em,1fr);
-    grid-template-rows: max-content min-content 1fr;
+    grid-template-rows: max-content min-content 1fr 1rem;
     flex-direction: column;
     align-items: center;
 }
@@ -20,6 +20,7 @@
     flex-direction: row;
     gap: 1rem;
     justify-self: center;
+    margin: 1rem;
 }
 
 .playerWrapper{

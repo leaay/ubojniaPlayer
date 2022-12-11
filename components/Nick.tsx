@@ -33,5 +33,3 @@ const Nick = ({setNick}:prop) => {
 }
 
 export default Nick
-{/* <input value={userInput} type='text' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setUserInput(target.value)}/>
-<button onClick={handleNick} >nick</button> */}

@@ -110,8 +110,8 @@ const Home: NextPage = () => {
   return (
     <div className={styles.pageBody} >
       <Head>
-        <title>testing socket.io</title>
-        <meta name="description" content="testing socket.io" />
+        <title>UBOJNIA PLAYER</title>
+        <meta name="description" content="UBOJNIA PLAYER" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
