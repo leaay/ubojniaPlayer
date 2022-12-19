@@ -131,7 +131,7 @@ const Home: NextPage = () => {
             playerRef.current?.seekTo(msg.sec)
           }
 
-          if(currentSec < msg.sec  && currentSec > msg.sec - 2 ){
+          if(currentSec < msg.sec  || currentSec > msg.sec - 2 ){
             playerRef.current?.seekTo(msg.sec)
           }
         }
