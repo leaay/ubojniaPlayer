@@ -1,14 +1,15 @@
 import type { NextPage } from 'next'
 import Image from 'next/future/image'
 import Head from 'next/head'
-import dynamic from 'next/dynamic'
-const  ReactPlayer = dynamic(() => import('react-player/youtube'), { ssr: false })
 import io from "socket.io-client";
+import dynamic from 'next/dynamic'
 import { useEffect , useState , useRef} from 'react';
 import Chat from '../components/Chat';
 import styles from '../styles/page.module.scss'
 import Nick from '../components/Nick';
 import AddVideo from '../components/AddVideo'
+const Player = dynamic(() => import("../components/Player"), {ssr: false});
+
 
 const socket = io();
 
@@ -66,8 +67,8 @@ const Home: NextPage = () => {
   }
 
   function handleTest(){
-    console.log(playerRef)
-    // player.current?.seekTo(20)
+    console.log(playerRef.current)
+    playerRef?.current?.seekTo(20)
   }
 
   useEffect(()=>{
@@ -132,8 +133,9 @@ const Home: NextPage = () => {
 
       
         <div className={styles.playerWrapper}>
-            <ReactPlayer 
-              ref={playerRef}
+
+            {/* <ReactPlayer 
+             
               playing={isPlaying} 
               muted={isMuted}
               controls={false}
@@ -147,6 +149,21 @@ const Home: NextPage = () => {
               onDuration={(duration)=>{setVidDuration(duration)}}
               onProgress={(progress)=>{setCurrentSec(Math.ceil(progress.playedSeconds)) ; handleStream(progress.playedSeconds)}}
               
+            /> */}
+
+            <Player
+              playerRef={playerRef} 
+              isPlaying={isPlaying} 
+              isMuted={isMuted} 
+              video={video} 
+              handlePause={handlePause} 
+              handleResume={handleResume} 
+              setIsPlaying={setIsPlaying} 
+              setVideo={setVideo}
+              setVidDuration={setVidDuration}
+              setCurrentSec={setCurrentSec}
+              handleStream={handleStream}
+              socket={socket}
             />
 
             
