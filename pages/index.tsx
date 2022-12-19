@@ -37,7 +37,7 @@ const Home: NextPage = () => {
   const [vidDuration , setVidDuration] = useState<number>(0)
   const [currentSec , setCurrentSec] = useState<number>(0)
 
-  const playerRef = useRef()
+  const playerRef:any = useRef()
 
   async function connectSocket() {
     await fetch("/api/socket");
@@ -67,8 +67,8 @@ const Home: NextPage = () => {
   }
 
   function handleTest(){
-    console.log(playerRef.current)
-    playerRef?.current?.seekTo(20)
+    
+    playerRef.current?.seekTo(20)
   }
 
   useEffect(()=>{
