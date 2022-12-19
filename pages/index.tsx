@@ -58,12 +58,21 @@ const Home: NextPage = () => {
 
   function handleCancel(){
     setVideo({url:"",title:"",user:""})
-    socket.emit('newVid' , {url:'' , title:"" , user: ''})
+    setCurrentSec(0)
+    setVidDuration(0)
+
+    if(isOwner){
+      socket.emit('newVid' , {url:'' , title:"" , user: ''})
+    }
+    
 
   }
 
   function handleStream(sec:number){
-    console.log(sec)
+    // console.log(sec.toFixed(0))
+    if(isOwner){
+    socket.emit('streamingVideo' , {sec:sec.toFixed(0) , streamedVideo:video})
+    }
   }
 
   function handleTest(){
@@ -71,15 +80,15 @@ const Home: NextPage = () => {
     playerRef.current?.seekTo(20)
   }
 
-  useEffect(()=>{
-    if(userNick.nick !== ''){
+  // useEffect(()=>{
+  //   if(userNick.nick !== ''){
           
-          setUsers([...users , userNick])
-          socket.emit("newChater",  userNick)
+  //         setUsers([...users , userNick])
+  //         socket.emit("newChater",  userNick)
           
-    }
-    return
-  },[userNick])
+  //   }
+  //   return
+  // },[userNick])
   
   useEffect(() => {
       
@@ -94,6 +103,8 @@ const Home: NextPage = () => {
 
     socket.on('stop', ()=>{
       setIsPlaying(false)
+      setVidDuration(0)
+      setCurrentSec(0)
     })
 
     socket.on('res', ()=>{
@@ -107,6 +118,25 @@ const Home: NextPage = () => {
   
     })
 
+    socket.on('streamedVideo' ,(msg:{sec:number , streamedVideo:video})=>{
+
+        if(isOwner){
+          return
+          
+        }else{
+          console.log(msg.sec)
+
+          if(video.url !== msg.streamedVideo.url){
+            setVideo(msg.streamedVideo)
+            playerRef.current?.seekTo(msg.sec)
+          }
+
+          if(currentSec < msg.sec  && currentSec > msg.sec - 2 ){
+            playerRef.current?.seekTo(msg.sec)
+          }
+        }
+    })
+
 
 
     return ()=>{
@@ -114,7 +144,8 @@ const Home: NextPage = () => {
       socket.off('stop'),
       socket.off('res'),
       socket.off('connect'),
-      socket.off('newUser')
+      socket.off('newUser'),
+      socket.off('streamedVideo')
   
     }
   }, []);
@@ -190,9 +221,9 @@ const Home: NextPage = () => {
 
               <>
                 {video.title === '' ? <button className='button' onClick={()=>setNewVideoModal(true)}>add video</button> : null}
-                <p>{vidDuration} vid duration</p>
-                <p>{currentSec} current vid time </p>
-                <button onClick={handleTest}>+10</button>
+                <p> {currentSec}s z {vidDuration.toFixed(0)}s  </p>
+              
+                {/* <button onClick={handleTest}>+10</button> */}
                 {video.title !== '' && isOwner ? <>
                 <button className='button' onClick={handleResume}>play <Image alt='resume vid' src={'/play.svg'} width={20} height={20} /></button>
                 <button className='button' onClick={handlePause}>pause <Image alt='pasue vid' src={'/pause.svg'}  width={20} height={20} /></button>

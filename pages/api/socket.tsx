@@ -43,6 +43,12 @@ const SocketHandler = (req:any , res:any) => {
 
         })
 
+        socket.on('streamingVideo', (msg) => {
+
+          socket.broadcast.emit('streamedVideo', msg)
+
+        })
+
         
 
       })

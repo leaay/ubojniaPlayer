@@ -4,6 +4,7 @@ import ReactPlayer from "react-player/lazy";
 
 // import dynamic from 'next/dynamic'
 interface prop{
+
     isPlaying:boolean,
     setIsPlaying:React.Dispatch<React.SetStateAction<boolean>>,
     setVidDuration:React.Dispatch<React.SetStateAction<number>>,
@@ -23,20 +24,19 @@ const Player = ({isPlaying , setIsPlaying , setVidDuration , setCurrentSec , han
 
     return (
         <ReactPlayer 
-        ref={playerRef}
-        playing={isPlaying} 
-        muted={isMuted}
-        controls={false}
-        url={video.url} 
-        onPause={handlePause}
-        onPlay={handleResume}
-        height={"auto"}
-        width={"100%"}
-        style={{width:"100%" , maxWidth:'100vw' , aspectRatio:'16/9'}}
-        onEnded={()=>{setIsPlaying(false) ; setVideo({url:"",title:"",user:""})}}
-        onDuration={(duration)=>{setVidDuration(duration)}}
-        onProgress={(progress)=>{setCurrentSec(Math.ceil(progress.playedSeconds)) ; handleStream(progress.playedSeconds)}}
-        
+          ref={playerRef}
+          playing={isPlaying} 
+          muted={isMuted}
+          controls={false}
+          url={video.url} 
+          onPause={handlePause}
+          onPlay={handleResume}
+          height={"auto"}
+          width={"100%"}
+          style={{width:"100%" , maxWidth:'100vw' , aspectRatio:'16/9'}}
+          onEnded={()=>{setIsPlaying(false) ; setVideo({url:"",title:"",user:""})}}
+          onDuration={(duration)=>{setVidDuration(duration)}}
+          onProgress={(progress)=>{setCurrentSec(Math.ceil(progress.playedSeconds)) ; handleStream(progress.playedSeconds)}}
       />
     )
 
