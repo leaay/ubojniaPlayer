@@ -16,11 +16,12 @@ interface prop{
     handleResume:()=>void,
     handlePause:()=>void,
     socket:any,
-    playerRef:any
+    playerRef:any,
+    setVideoProgress:React.Dispatch<React.SetStateAction<number>>,
 
 }
 
-const Player = ({isPlaying , setIsPlaying , setVidDuration , setCurrentSec , handleStream , setVideo , isMuted , video , handleResume , handlePause , socket , playerRef}:prop) => {
+const Player = ({isPlaying ,setVideoProgress, setIsPlaying , setVidDuration , setCurrentSec , handleStream , setVideo , isMuted , video , handleResume , handlePause , socket , playerRef}:prop) => {
 
     return (
         <ReactPlayer 
@@ -34,9 +35,9 @@ const Player = ({isPlaying , setIsPlaying , setVidDuration , setCurrentSec , han
           height={"auto"}
           width={"100%"}
           style={{width:"100%" , maxWidth:'100vw' , aspectRatio:'16/9'}}
-          onEnded={()=>{setIsPlaying(false) ; setVideo({url:"",title:"",user:""})}}
+          onEnded={()=>{setIsPlaying(false) ; setVideo({url:"",title:"",user:""}) ; setVideoProgress(0)}}
           onDuration={(duration)=>{setVidDuration(duration)}}
-          onProgress={(progress)=>{setCurrentSec(Math.ceil(progress.playedSeconds)) ; handleStream(progress.playedSeconds)}}
+          onProgress={(progress)=>{setCurrentSec(Math.ceil(progress.playedSeconds)) ; handleStream(progress.playedSeconds) ; setVideoProgress(Number(progress.played.toFixed(2)))}}
       />
     )
 

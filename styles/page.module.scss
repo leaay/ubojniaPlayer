@@ -20,6 +20,7 @@
     flex-direction: row;
     gap: 1rem;
     justify-self: center;
+    align-items: center;
     margin: 1rem;
 }
 
@@ -59,6 +60,18 @@
         }
     }
 
+
+}
+
+.playerVideoDuration{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 5px;
+    width: 100%;
+    background-color: rgb(12, 77, 117);
+
+    transition: width 2.5s linear;
 
 }
 
