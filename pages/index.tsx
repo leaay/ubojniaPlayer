@@ -10,7 +10,8 @@ import Nick from '../components/Nick';
 import AddVideo from '../components/AddVideo'
 const Player = dynamic(() => import("../components/Player"), {ssr: false});
 import useTimeToMinSec from '../components/useTimeToMinSec';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const socket = io();
 
@@ -52,12 +53,14 @@ const Home: NextPage = () => {
 
 
   function handlePause(){
+    toast('Video paused')
     socket.emit("pause")
     setIsPlaying(false)
   }
 
   function handleResume(){
     socket.emit("resume")
+    toast('Video resumed')
     setIsPlaying(true)
   }
 
@@ -66,7 +69,7 @@ const Home: NextPage = () => {
     setCurrentSec(0)
     setVidDuration(0)
     setVideoProgress(0)
-
+    toast('Video skiped')
     if(isOwner){
       socket.emit('newVid' , {url:'' , title:"" , user: ''})
     }
@@ -94,16 +97,24 @@ const Home: NextPage = () => {
       setVideo(msg)
       setIsOwner(false)
       setIsPlaying(true)
+      if(msg.url === ''){
+        toast('Video skiped')
+      }else{
+        toast(`Video added by ${msg.user}`)
+      }
+      
     })
 
     socket.on('stop', ()=>{
       setIsPlaying(false)
+      toast('Video paused')
       setVidDuration(0)
       setCurrentSec(0)
     })
 
     socket.on('res', ()=>{
       setIsPlaying(true)
+      
     })
 
 
@@ -126,6 +137,7 @@ const Home: NextPage = () => {
             playerRef.current?.seekTo(msg.sec)
           }
         }
+
     })
 
 
@@ -144,8 +156,21 @@ const Home: NextPage = () => {
 
 
 
+
   return (
     <div className={styles.pageBody} >
+      <ToastContainer 
+          position="bottom-left"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          draggable
+          theme="dark"
+          pauseOnFocusLoss
+        />
+
       <Head>
         <title>UBOJNIA</title>
         <meta name="description" content="UBOJNIA PLAYER" />
