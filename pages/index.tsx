@@ -53,13 +53,13 @@ const Home: NextPage = () => {
 
 
   function handlePause(){
-    toast('Video paused')
+    
     socket.emit("pause")
     setIsPlaying(false)
   }
 
   function handleResume(){
-    socket.emit("resume")
+    
     toast('Video resumed')
     setIsPlaying(true)
   }
@@ -69,7 +69,7 @@ const Home: NextPage = () => {
     setCurrentSec(0)
     setVidDuration(0)
     setVideoProgress(0)
-    toast('Video skiped')
+    
     if(isOwner){
       socket.emit('newVid' , {url:'' , title:"" , user: ''})
     }
