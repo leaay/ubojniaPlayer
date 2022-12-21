@@ -1,8 +1,6 @@
 
-// const  ReactPlayer = dynamic(() => import('react-player/youtube'), { ssr: false })
 import ReactPlayer from "react-player/lazy";
 
-// import dynamic from 'next/dynamic'
 interface prop{
 
     isPlaying:boolean,
@@ -37,28 +35,16 @@ const Player = ({isPlaying ,setVideoProgress, setIsPlaying , setVidDuration , se
           style={{width:"100%" , maxWidth:'100vw' , aspectRatio:'16/9'}}
           onEnded={()=>{setIsPlaying(false) ; setVideo({url:"",title:"",user:""}) ; setVideoProgress(0)}}
           onDuration={(duration)=>{setVidDuration(duration)}}
-          onProgress={(progress)=>{setCurrentSec(Math.ceil(progress.playedSeconds)) ; handleStream(progress.playedSeconds) ; setVideoProgress(Number(progress.played.toFixed(2)))}}
+          onProgress={(progress)=>{
+            setCurrentSec(progress.playedSeconds); 
+            handleStream(progress.playedSeconds); 
+            setVideoProgress(Number(progress.played.toFixed(2)))
+          }}
       />
     )
 
 }
 
 
-{/* <ReactPlayer 
-             
-             playing={isPlaying} 
-             muted={isMuted}
-             controls={false}
-             url={video.url} 
-             onPause={handlePause}
-             onPlay={handleResume}
-             height={"auto"}
-             width={"100%"}
-             style={{width:"100%" , maxWidth:'100vw' , aspectRatio:'16/9'}}
-             onEnded={()=>{setIsPlaying(false) ; setVideo({url:"",title:"",user:""})}}
-             onDuration={(duration)=>{setVidDuration(duration)}}
-             onProgress={(progress)=>{setCurrentSec(Math.ceil(progress.playedSeconds)) ; handleStream(progress.playedSeconds)}}
-             
-           /> */}
 
 export default Player
