@@ -53,14 +53,12 @@ const Home: NextPage = () => {
 
 
   function handlePause(){
-    
-    
+    socket.emit("pause")
     setIsPlaying(false)
   }
 
   function handleResume(){
-    
-    
+    socket.emit("resume")
     setIsPlaying(true)
   }
 
@@ -69,7 +67,7 @@ const Home: NextPage = () => {
     setCurrentSec(0)
     setVidDuration(0)
     setVideoProgress(0)
-    
+    toast('Video skiped')
     if(isOwner){
       socket.emit('newVid' , {url:'' , title:"" , user: ''})
     }
