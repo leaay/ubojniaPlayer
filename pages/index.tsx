@@ -54,13 +54,13 @@ const Home: NextPage = () => {
 
   function handlePause(){
     
-    socket.emit("pause")
+    
     setIsPlaying(false)
   }
 
   function handleResume(){
     
-    toast('Video resumed')
+    
     setIsPlaying(true)
   }
 
