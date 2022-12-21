@@ -106,7 +106,7 @@ const Home: NextPage = () => {
     socket.on('stop', ()=>{
       setIsPlaying(false)
       toast('Video paused')
-      console.log('pasue')
+     
       
       
     })
@@ -118,8 +118,7 @@ const Home: NextPage = () => {
 
     socket.on('streamedVideo' ,(msg:{sec:number , streamedVideo:video})=>{
 
-        console.log(currentSec)
-        console.log(videoProgress)
+
 
         if(isOwner){
           return
@@ -156,14 +155,11 @@ const Home: NextPage = () => {
   }, []);
 
   useEffect(() => {
-
-    console.log(streamedSec + ' streamed / local ' + currentSec)
     if(isOwner){
       return
     }else{
       if(streamedSec - 2 > currentSec || streamedSec + 2 < currentSec ){
         playerRef.current?.seekTo(streamedSec)
-        console.log('seeked')
       }
     }
 
