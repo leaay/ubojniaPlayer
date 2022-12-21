@@ -65,6 +65,7 @@ const Home: NextPage = () => {
     setVideo({url:"",title:"",user:""})
     setCurrentSec(0)
     setVidDuration(0)
+    setVideoProgress(0)
 
     if(isOwner){
       socket.emit('newVid' , {url:'' , title:"" , user: ''})
@@ -177,23 +178,35 @@ const Home: NextPage = () => {
 
             
 
-            <div style={ video.title === '' ? {opacity:'1'} : {}} className={styles.playerOverlay}>
-            {video.title === '' &&  <p    >no video playing right now</p>}
+          <div style={ video.title === '' ? {opacity:'1'} : {}} className={styles.playerOverlay}>
+            <div className={styles.playerOverlayWrapper}>
+                {video.title === '' &&  <p    >no video playing right now</p>}
 
-            {video.title !== '' && 
-                <div>  
-                    <h1>{video.title} </h1>
-                    <button onClick={()=>setIsMuted(!isMuted)}>
-                      <Image alt='mute or unmute' src={isMuted ? '/mute.svg' : '/unmute.svg'} width={40} height={40} /></button>
-                    <h3>requested by: {video.user}</h3>
-                </div>
-            }
+                {video.title !== '' && 
+                  <>
+                    <div>  
+                        <h1>{video.title} </h1>
+                        <button onClick={()=>setIsMuted(!isMuted)}>
+                          <Image alt='mute or unmute' src={isMuted ? '/mute.svg' : '/unmute.svg'} width={40} height={40} /></button>
+                        <h3>requested by: {video.user}</h3>
+                    </div>
+                    <div className={styles.playerOverlayProgress}>
+                      {video.title=== '' ? null : <p> {currentMin}:{currentSecond < 10 ? '0' : null}{currentSecond} / {durationMin}:{durationSecond < 10 ? '0': null}{durationSecond} </p> }
+                      
+                      <div className={styles.playerOverlayProgressBarWrapper}>
+                          <div style={{width:`${videoProgress * 100}%`}} className={styles.playerOverlayProgressBar}></div>
+                          <div className={styles.playerOverlayGrayLine}></div>
+                      </div>
 
+                    </div>
+                  </>
+                }
             </div>
+          </div>
 
             <div style={{width:`${videoProgress * 100}%`}}  className={styles.playerVideoDuration}> </div>
 
-          </div>
+        </div>
 
           <div className={styles.playerLinks}>
 
@@ -201,10 +214,6 @@ const Home: NextPage = () => {
 
               <>
                 {video.title === '' ? <button className='button' onClick={()=>setNewVideoModal(true)}>add video</button> : null}
-                
-                {video.title=== '' ? null : <p> {currentMin}:{currentSecond < 10 ? '0' : null}{currentSecond} / {durationMin}:{durationSecond < 10 ? '0': null}{durationSecond} </p> } 
-              
-                {/* <button onClick={handleTest}>+10</button> */}
                 {video.title !== '' && isOwner ? <>
                 <button className='button' onClick={handleResume}><Image alt='resume vid' src={'/play.svg'} width={20} height={20} /></button>
                 <button className='button' onClick={handlePause}><Image alt='pasue vid' src={'/pause.svg'}  width={20} height={20} /></button>

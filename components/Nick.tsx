@@ -16,7 +16,7 @@ const Nick = ({setNick}:prop) => {
 
     return(
         <div className={styles.body}>
-            <input type='text' value={nickInput} placeholder='nick' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setNickInput(target.value)}/>
+            <input maxLength={20} type='text' value={nickInput} placeholder='nick' onChange={({target}:ChangeEvent<HTMLInputElement>)=>setNickInput(target.value)}/>
             <div className={styles.colorsBox}>
                 {colorsArray.map((colorValue , index) => <button 
                 key={index} 
