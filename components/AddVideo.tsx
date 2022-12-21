@@ -21,8 +21,6 @@ const AddVideo = ({close, user , socket , addVideo, owner , playing}:prop) => {
 
     function handleSend(){
 
-        console.log({url:urlInput , title:titleInput , user})
-
         addVideo({url:urlInput , title:titleInput , user})
         socket.emit('newVid' , {url:urlInput , title:titleInput , user})
         owner(true)

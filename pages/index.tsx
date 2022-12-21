@@ -131,9 +131,9 @@ const Home: NextPage = () => {
             playerRef.current?.seekTo(msg.sec)
           }
 
-          if(currentSec < msg.sec  || currentSec > msg.sec + 2 ){
-            playerRef.current?.seekTo(msg.sec)
-          }
+          // if(currentSec < msg.sec  || currentSec > msg.sec + 2 ){
+          //   playerRef.current?.seekTo(msg.sec)
+          // }
         }
 
     })
@@ -156,8 +156,8 @@ const Home: NextPage = () => {
 
 
   return (
-    <div className={styles.pageBody} >
-      <ToastContainer 
+    <>
+          <ToastContainer 
           position="bottom-left"
           autoClose={1000}
           hideProgressBar={false}
@@ -168,6 +168,9 @@ const Home: NextPage = () => {
           theme="dark"
           pauseOnFocusLoss
         />
+    
+    <div className={styles.pageBody} >
+
 
       <Head>
         <title>UBOJNIA</title>
@@ -265,6 +268,7 @@ const Home: NextPage = () => {
       
        
     </div>
+  </>
   )
 }
 
