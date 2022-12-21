@@ -146,7 +146,7 @@ const Home: NextPage = () => {
   return (
     <div className={styles.pageBody} >
       <Head>
-        <title>UBOJNIA PLAYER</title>
+        <title>UBOJNIA</title>
         <meta name="description" content="UBOJNIA PLAYER" />
         <link rel="apple-touch-icon" sizes="180x180" href="favico/apple-touch-icon.png"/>
         <link rel="icon" type="image/png" sizes="32x32" href="favico/favicon-32x32.png"/>
