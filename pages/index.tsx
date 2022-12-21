@@ -106,6 +106,7 @@ const Home: NextPage = () => {
     socket.on('stop', ()=>{
       setIsPlaying(false)
       toast('Video paused')
+      console.log('pasue')
       setVidDuration(0)
       setCurrentSec(0)
     })
@@ -130,7 +131,7 @@ const Home: NextPage = () => {
             setVideo(msg.streamedVideo)
             playerRef.current?.seekTo(msg.sec)
           }
-
+          return
           // if(currentSec < msg.sec  || currentSec > msg.sec + 2 ){
           //   playerRef.current?.seekTo(msg.sec)
           // }
