@@ -28,7 +28,6 @@ const Chat = ({socket,currentUser}:prop) => {
 
 
     function handleMessage(){
-        console.log(messageBox.current?.clientHeight)
         
         const sending = {
             message:messageInput,
@@ -94,7 +93,7 @@ const Chat = ({socket,currentUser}:prop) => {
             <div className={styles.inputsBox}>
                 <input 
                     onKeyPress={({key})=>{if(key === 'Enter' && messageInput !== ''){handleMessage()}}} 
-                    maxLength={30} 
+                    maxLength={40} 
                     value={messageInput} 
                     type='text' 
                     placeholder='message' 

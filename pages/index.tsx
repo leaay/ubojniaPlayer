@@ -40,7 +40,7 @@ const Home: NextPage = () => {
 
   const [currentSec , setCurrentSec] = useState<number>(0)
   const [streamedSec , setStreamedSec] = useState<number>(0)
-
+  const [error , setError] = useState<boolean>(false)
   const playerRef:any = useRef()
 
   const {min:currentMin , sec:currentSecond} = useTimeToMinSec(currentSec)
@@ -83,10 +83,6 @@ const Home: NextPage = () => {
     }
   }
 
-  function handleTest(){
-    
-    playerRef.current?.seekTo(20)
-  }
 
   
   useEffect(() => {
@@ -98,7 +94,7 @@ const Home: NextPage = () => {
       setVideo(msg)
       setIsOwner(false)
       setIsPlaying(true)
-      
+
       if(msg.url === ''){
         toast('Video skiped')
       }else{
@@ -193,6 +189,7 @@ const Home: NextPage = () => {
       }
 
       if(streamedSec - 2 > currentSec || streamedSec + 2 < currentSec ){
+        console.log('seekTo')
         playerRef.current?.seekTo(streamedSec)
       }
 
@@ -237,6 +234,7 @@ const Home: NextPage = () => {
 
 
             <Player
+              setError={setError}
               setVideoProgress={setVideoProgress}
               playerRef={playerRef} 
               isPlaying={isPlaying} 
@@ -291,6 +289,8 @@ const Home: NextPage = () => {
               <>
                 {video.title === '' ? <button className='button' onClick={()=>setNewVideoModal(true)}>add video</button> : null}
                 {video.title !== '' && isOwner ? <>
+                <button className='button' onClick={()=>playerRef.current?.seekTo(currentSec+5)}>+5s</button>
+                <button className='button' onClick={()=>playerRef.current?.seekTo(currentSec-5)}>-5s</button>
                 <button className='button' onClick={handleResume}><Image alt='resume vid' src={'/play.svg'} width={20} height={20} /></button>
                 <button className='button' onClick={handlePause}><Image alt='pasue vid' src={'/pause.svg'}  width={20} height={20} /></button>
                 <button style={{backgroundColor:'#a82a1e'}} className='button' onClick={handleCancel}>skip <Image alt='cancel vid' src={'/close.svg'}  width={20} height={20} /></button>
@@ -311,10 +311,8 @@ const Home: NextPage = () => {
           socket={socket} 
           user={userNick.nick} 
           close={setNewVideoModal} 
-          setCurrentSec={setCurrentSec}
-          setVidDuration={setVidDuration}
-          setVideoProgress={setVideoProgress}
-          setStreamedSec={setStreamedSec}
+      
+
           
         />
       }
