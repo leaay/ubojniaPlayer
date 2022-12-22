@@ -9,11 +9,15 @@ interface prop {
     socket:any,
     addVideo:(i:any)=>void,
     owner: (i:boolean)=>void,
-    playing: (i:boolean)=>void
+    playing: (i:boolean)=>void,
+    setCurrentSec:React.Dispatch<React.SetStateAction<number>>,
+    setVideoProgress:React.Dispatch<React.SetStateAction<number>>,
+    setStreamedSec:React.Dispatch<React.SetStateAction<number>>,
+    setVidDuration:React.Dispatch<React.SetStateAction<number>>,
 }
 
 
-const AddVideo = ({close, user , socket , addVideo, owner , playing}:prop) => {
+const AddVideo = ({close, user , socket , addVideo, owner , playing , setCurrentSec , setStreamedSec , setVidDuration , setVideoProgress}:prop) => {
 
     const [urlInput , setUrlInput] = useState<string>('')
     const [titleInput , setTitleInput] = useState<string>('')
@@ -26,6 +30,11 @@ const AddVideo = ({close, user , socket , addVideo, owner , playing}:prop) => {
         owner(true)
         playing(true)
         close(false)
+        setCurrentSec(0)
+        setStreamedSec(0)
+        setVidDuration(0)
+        setVideoProgress(0)
+
 
     }
 

@@ -33,10 +33,10 @@ const Player = ({isPlaying ,setVideoProgress, setIsPlaying , setVidDuration , se
           height={"auto"}
           width={"100%"}
           style={{width:"100%" , maxWidth:'100vw' , aspectRatio:'16/9'}}
-          onEnded={()=>{setIsPlaying(false) ; setVideo({url:"",title:"",user:""}) ; setVideoProgress(0)}}
+          // onEnded={()=>{setIsPlaying(false) ; setVideo({url:"",title:"",user:""}) ; setVideoProgress(0) ; console.log('ended')}}
           onDuration={(duration)=>{setVidDuration(duration)}}
           onProgress={(progress)=>{
-            setCurrentSec(progress.playedSeconds); 
+            setCurrentSec(progress.playedSeconds);
             handleStream(progress.playedSeconds); 
             setVideoProgress(Number(progress.played.toFixed(2)))
           }}

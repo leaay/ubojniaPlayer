@@ -37,8 +37,10 @@ const Home: NextPage = () => {
   const [isOwner , setIsOwner] = useState<boolean>(false)
   const [videoProgress , setVideoProgress] = useState<number>(0)
   const [vidDuration , setVidDuration] = useState<number>(0)
+
   const [currentSec , setCurrentSec] = useState<number>(0)
   const [streamedSec , setStreamedSec] = useState<number>(0)
+
   const playerRef:any = useRef()
 
   const {min:currentMin , sec:currentSecond} = useTimeToMinSec(currentSec)
@@ -67,6 +69,7 @@ const Home: NextPage = () => {
     setCurrentSec(0)
     setVidDuration(0)
     setVideoProgress(0)
+    setStreamedSec(0)
     toast('Video skiped')
     if(isOwner){
       socket.emit('newVid' , {url:'' , title:"" , user: ''})
@@ -95,6 +98,7 @@ const Home: NextPage = () => {
       setVideo(msg)
       setIsOwner(false)
       setIsPlaying(true)
+      
       if(msg.url === ''){
         toast('Video skiped')
       }else{
@@ -126,8 +130,9 @@ const Home: NextPage = () => {
         }else{
 
           
-
-          setStreamedSec(msg.sec)
+          console.log('streamedVideo' + msg.sec)
+          setStreamedSec(Number(msg.sec))
+          console.log(videoProgress)
 
           if(video.url !== msg.streamedVideo.url){
             setVideo(msg.streamedVideo)
@@ -155,12 +160,39 @@ const Home: NextPage = () => {
   }, []);
 
   useEffect(() => {
+
+    console.log( streamedSec + 'streamed / total ' + vidDuration) 
+
+
+
     if(isOwner){
-      return
-    }else{
-      if(streamedSec - 2 > currentSec || streamedSec + 2 < currentSec ){
-        playerRef.current?.seekTo(streamedSec)
+
+      if(currentSec  >= vidDuration - 1){
+        console.log('video ended2')
+        setVideo({url:"",title:"",user:""})
+        setCurrentSec(0)
+        setVidDuration(0)
+        setVideoProgress(0)
+        setStreamedSec(0)
+        
       }
+  
+    }else{
+
+      if(streamedSec  >= vidDuration - 1){
+        console.log('video ended2')
+        setVideo({url:"",title:"",user:""})
+        setCurrentSec(0)
+        setVidDuration(0)
+        setVideoProgress(0)
+        setStreamedSec(0)
+        
+      }
+
+      // if(streamedSec - 2 > currentSec || streamedSec + 2 < currentSec ){
+      //   playerRef.current?.seekTo(streamedSec)
+      // }
+
     }
 
 
@@ -269,7 +301,19 @@ const Home: NextPage = () => {
           </div>
 
       {
-        newVideoModal && <AddVideo playing={setIsPlaying} owner={setIsOwner} addVideo={setVideo} socket={socket} user={userNick.nick} close={setNewVideoModal} />
+        newVideoModal && <AddVideo 
+          playing={setIsPlaying} 
+          owner={setIsOwner} 
+          addVideo={setVideo} 
+          socket={socket} 
+          user={userNick.nick} 
+          close={setNewVideoModal} 
+          setCurrentSec={setCurrentSec}
+          setVidDuration={setVidDuration}
+          setVideoProgress={setVideoProgress}
+          setStreamedSec={setStreamedSec}
+          
+        />
       }
 
       {
