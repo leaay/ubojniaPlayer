@@ -30,10 +30,10 @@ const AddVideo = ({close, user , socket , addVideo, owner , playing , setCurrent
         owner(true)
         playing(true)
         close(false)
-        setCurrentSec(0)
-        setStreamedSec(0)
-        setVidDuration(0)
-        setVideoProgress(0)
+        // setCurrentSec(0)
+        // setStreamedSec(0)
+        // setVidDuration(0)
+        // setVideoProgress(0)
 
 
     }

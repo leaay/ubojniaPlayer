@@ -122,7 +122,7 @@ const Home: NextPage = () => {
 
     socket.on('streamedVideo' ,(msg:{sec:number , streamedVideo:video})=>{
 
-
+        console.log('streamedVideo' + msg.sec)
 
         if(isOwner){
           return
@@ -130,10 +130,9 @@ const Home: NextPage = () => {
         }else{
 
           
-          console.log('streamedVideo' + msg.sec)
+          
           setStreamedSec(Number(msg.sec))
-          console.log(videoProgress)
-
+          
           if(video.url !== msg.streamedVideo.url){
             setVideo(msg.streamedVideo)
             playerRef.current?.seekTo(msg.sec)
@@ -161,37 +160,41 @@ const Home: NextPage = () => {
 
   useEffect(() => {
 
-    console.log( streamedSec + 'streamed / total ' + vidDuration) 
-
-
-
     if(isOwner){
 
       if(currentSec  >= vidDuration - 1){
-        console.log('video ended2')
-        setVideo({url:"",title:"",user:""})
-        setCurrentSec(0)
-        setVidDuration(0)
-        setVideoProgress(0)
-        setStreamedSec(0)
+
+        setTimeout(() => {
+          setVideo({url:"",title:"",user:""})
+          setCurrentSec(0)
+          setVidDuration(0)
+          setVideoProgress(0)
+          setStreamedSec(0)
+        }, 3000);
+
         
       }
   
     }else{
 
-      if(streamedSec  >= vidDuration - 1){
-        console.log('video ended2')
-        setVideo({url:"",title:"",user:""})
-        setCurrentSec(0)
-        setVidDuration(0)
-        setVideoProgress(0)
-        setStreamedSec(0)
+      if(streamedSec  >= vidDuration - 1 && video.url !== ""){
+
+        setTimeout(() => {
+
+          setVideo({url:"",title:"",user:""})
+          setCurrentSec(0)
+          setVidDuration(0)
+          setVideoProgress(0)
+          setStreamedSec(0)
+
+        }, 3000);
+
         
       }
 
-      // if(streamedSec - 2 > currentSec || streamedSec + 2 < currentSec ){
-      //   playerRef.current?.seekTo(streamedSec)
-      // }
+      if(streamedSec - 2 > currentSec || streamedSec + 2 < currentSec ){
+        playerRef.current?.seekTo(streamedSec)
+      }
 
     }
 
