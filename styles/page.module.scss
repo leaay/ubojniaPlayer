@@ -72,6 +72,12 @@
             h3{
                 margin-bottom: 3rem;
             }
+            h1{ 
+                cursor: pointer;
+                &:hover, &:focus-visible{
+                    color: rgb(23, 95, 139);
+                }
+            }
          
         }
         .playerOverlayProgress{

@@ -24,7 +24,7 @@ const AddVideo = ({close, user , socket , addVideo, owner , playing  }:prop) => 
     function handleSend(){
 
         if(ReactPlayer.canPlay(urlInput)){
-            console.log('can play')
+            
             addVideo({url:urlInput , title:titleInput , user})
             socket.emit('newVid' , {url:urlInput , title:titleInput , user})
             owner(true)
@@ -36,11 +36,6 @@ const AddVideo = ({close, user , socket , addVideo, owner , playing  }:prop) => 
             return
             
         }
-        
-
-
-
-
     }
 
     return(

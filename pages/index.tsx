@@ -40,7 +40,7 @@ const Home: NextPage = () => {
 
   const [currentSec , setCurrentSec] = useState<number>(0)
   const [streamedSec , setStreamedSec] = useState<number>(0)
-  const [error , setError] = useState<boolean>(false)
+
   const playerRef:any = useRef()
 
   const {min:currentMin , sec:currentSecond} = useTimeToMinSec(currentSec)
@@ -234,7 +234,6 @@ const Home: NextPage = () => {
 
 
             <Player
-              setError={setError}
               setVideoProgress={setVideoProgress}
               playerRef={playerRef} 
               isPlaying={isPlaying} 
@@ -259,8 +258,8 @@ const Home: NextPage = () => {
                 {video.title !== '' && 
                   <>
                     <div>  
-                        <h1>{video.title} </h1>
-                        <button onClick={()=>setIsMuted(!isMuted)}>
+                        <h1><a target="_blank" href={video.url}>{video.title} </a></h1>
+                        <button className='button2' onClick={()=>setIsMuted(!isMuted)}>
                           <Image alt='mute or unmute' src={isMuted ? '/mute.svg' : '/unmute.svg'} width={40} height={40} /></button>
                         <h3>requested by: {video.user}</h3>
                     </div>
@@ -289,10 +288,11 @@ const Home: NextPage = () => {
               <>
                 {video.title === '' ? <button className='button' onClick={()=>setNewVideoModal(true)}>add video</button> : null}
                 {video.title !== '' && isOwner ? <>
-                <button className='button' onClick={()=>playerRef.current?.seekTo(currentSec+5)}>+5s</button>
+                
                 <button className='button' onClick={()=>playerRef.current?.seekTo(currentSec-5)}>-5s</button>
                 <button className='button' onClick={handleResume}><Image alt='resume vid' src={'/play.svg'} width={20} height={20} /></button>
                 <button className='button' onClick={handlePause}><Image alt='pasue vid' src={'/pause.svg'}  width={20} height={20} /></button>
+                <button className='button' onClick={()=>playerRef.current?.seekTo(currentSec+5)}>+5s</button>
                 <button style={{backgroundColor:'#a82a1e'}} className='button' onClick={handleCancel}>skip <Image alt='cancel vid' src={'/close.svg'}  width={20} height={20} /></button>
                 </> : null }
                 
@@ -305,21 +305,18 @@ const Home: NextPage = () => {
 
       {
         newVideoModal && <AddVideo 
-          playing={setIsPlaying} 
-          owner={setIsOwner} 
-          addVideo={setVideo} 
-          socket={socket} 
-          user={userNick.nick} 
-          close={setNewVideoModal} 
-      
-
-          
-        />
+            playing={setIsPlaying} 
+            owner={setIsOwner} 
+            addVideo={setVideo} 
+            socket={socket} 
+            user={userNick.nick} 
+            close={setNewVideoModal}   
+          />
       }
 
       {
           userNick.nick === '' ? 
-          <Nick setNick={setUserNick} /> : 
+          <Nick currentUser={userNick} setNick={setUserNick} /> : 
           <Chat currentUser={userNick} socket={socket} />
       }
       

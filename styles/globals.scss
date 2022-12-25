@@ -25,13 +25,11 @@ button,input{
   all: unset;
   cursor: pointer;
   box-sizing: border-box;
-  &:focus, &:hover{
-    outline: solid 1px white;
-  }
+
 }
 input[type="text"]{
   &:focus-visible{
-    outline: solid 2px rgb(27, 158, 240);
+    outline: solid 2px rgb(23, 95, 139);
   }
   &:focus:not(:focus-visible){
     outline: none;
@@ -39,9 +37,10 @@ input[type="text"]{
 }
 
 .button{
-  background-color: rgb(12, 77, 117);
+  background-color: rgb(23, 95, 139);
   padding: .4rem 1rem ;
   border-radius: 5px;
+  min-height: 40px;
   color: white;
   display: flex;
   align-items: center;
@@ -49,6 +48,22 @@ input[type="text"]{
   gap: .5rem;
   &:disabled{
     background-color: rgb(12, 77, 117, .5);
+  }
+  &:hover, &:focus-visible{
+    outline:solid 2px white;
+    
+  }
+
+}
+.button2{
+  width: 5rem;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  &:hover, &:focus-visible{
+    background-color: rgba(185, 180, 180, 0.486);
   }
 }
 
@@ -62,8 +77,8 @@ input[type="text"]{
 
 @media (prefers-color-scheme: dark) {
   .button{
-    &:focus, &:hover{
-      outline: solid 1px white;
+    &:focus-visible, &:hover{
+      outline: solid 2px white;
     }
   }
 }

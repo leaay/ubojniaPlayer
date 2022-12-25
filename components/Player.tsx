@@ -17,17 +17,16 @@ interface prop{
     socket:any,
     playerRef:any,
     setVideoProgress:React.Dispatch<React.SetStateAction<number>>,
-    setError:(err:boolean)=>void
+   
 }
 
-const Player = ({isPlaying ,setVideoProgress,  setError , setIsPlaying , setVidDuration , setCurrentSec , handleStream , setVideo , isMuted , video , handleResume , handlePause , socket , playerRef}:prop) => {
+const Player = ({isPlaying ,setVideoProgress,   setVidDuration , setCurrentSec , handleStream , isMuted , video , handleResume , handlePause , socket , playerRef}:prop) => {
 
 
 
 
     return (
         <ReactPlayer 
-          onReady={()=>{setError(false)}}
           ref={playerRef}
           playing={isPlaying} 
           muted={isMuted}
@@ -38,7 +37,6 @@ const Player = ({isPlaying ,setVideoProgress,  setError , setIsPlaying , setVidD
           height={"auto"}
           width={"100%"}
           style={{width:"100%" , maxWidth:'100vw' , aspectRatio:'16/9'}}
-          onError={(err)=>setError(true)}
           onDuration={(duration)=>{setVidDuration(duration)}}
           onProgress={(progress)=>{
             setCurrentSec(progress.playedSeconds);
