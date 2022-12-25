@@ -20,6 +20,7 @@ const AddVideo = ({close, user , socket , addVideo, owner , playing  }:prop) => 
     const [urlInput , setUrlInput] = useState<string>('')
     const [titleInput , setTitleInput] = useState<string>('')
 
+    const isInvalid = urlInput === '' || titleInput === '';
 
     function handleSend(){
 
@@ -47,7 +48,7 @@ const AddVideo = ({close, user , socket , addVideo, owner , playing  }:prop) => 
                     <h2>Video details</h2>
                     <input  onChange={({target}:ChangeEvent<HTMLInputElement>)=>setUrlInput(target.value)} type="text" placeholder="Video URL" />
                     <input onChange={({target}:ChangeEvent<HTMLInputElement>)=>setTitleInput(target.value)} maxLength={30} type="text" placeholder="Video Title" />
-                    <button onClick={handleSend} className='button'>Play</button>
+                    <button disabled={isInvalid} onClick={handleSend} className='button'>Play</button>
             </div>
         </div>
         </>
