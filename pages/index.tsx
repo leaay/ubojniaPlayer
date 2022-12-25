@@ -258,7 +258,7 @@ const Home: NextPage = () => {
                 {video.title !== '' && 
                   <>
                     <div>  
-                        <h1><a target="_blank" href={video.url}>{video.title} </a></h1>
+                        <h1 ><a rel="noreferrer" target="_blank" href={video.url}>{video.title} </a></h1>
                         <button className='button2' onClick={()=>setIsMuted(!isMuted)}>
                           <Image alt='mute or unmute' src={isMuted ? '/mute.svg' : '/unmute.svg'} width={40} height={40} /></button>
                         <h3>requested by: {video.user}</h3>
