@@ -1,7 +1,12 @@
 # UBOJNIA PLAYER
 
+
+
 Real time video player with real-time chat using socket.io build in nextJS.
+
 Project deployed on [railway](https://railway.app)
+
+[live site](https://ubojnia.up.railway.app)
 
 Features: 
 
